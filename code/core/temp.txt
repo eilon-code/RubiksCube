@@ -1,0 +1,49 @@
+// יצירת מופע של לוגיקת הקובייה שלנו בדיקת שפיות
+RubiksCubeLogic cubeLogic;
+std::cout << "Rubik's Cube Logic initialized with " << cubeLogic.getCubies().size() << " cubies." << std::endl;
+// פונקציית תנאי המותאמת לטיפוסים החדשים
+bool defaultCondition(const Cubie& cubie, MoveOption move) {
+    switch (move) {
+        case MoveOption::UP:    return std::abs(cubie.position.z -  1.0f) < 0.01f;
+        case MoveOption::DOWN:  return std::abs(cubie.position.z - (-1.0f)) < 0.01f;
+        case MoveOption::RIGHT: return std::abs(cubie.position.x -  1.0f) < 0.01f;
+        case MoveOption::LEFT:  return std::abs(cubie.position.x - (-1.0f)) < 0.01f;
+        case MoveOption::FRONT: return std::abs(cubie.position.y -  1.0f) < 0.01f;
+        case MoveOption::BACK:  return std::abs(cubie.position.y - (-1.0f)) < 0.01f;
+    }
+    return false;
+}
+
+// פונקציית וקטור סיבוב המוחזרת כ-Quaternion
+Quaternion defaultRotationVector(MoveOption move, float angleRadians) {
+    switch (move) {
+        case MoveOption::UP:    
+        case MoveOption::DOWN:  
+            return glm::angleAxis(angleRadians, Vector3d(0.0f, 0.0f, 1.0f));
+        case MoveOption::RIGHT: 
+        case MoveOption::LEFT:  
+            return glm::angleAxis(angleRadians, Vector3d(1.0f, 0.0f, 0.0f));
+        case MoveOption::FRONT: 
+        case MoveOption::BACK:  
+            return glm::angleAxis(angleRadians, Vector3d(0.0f, 1.0f, 0.0f));
+    }
+    return Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
+}
+
+// int main() {
+//     RubiksCubeLogic cube;
+
+//     float pi = 3.1415926535f;
+    
+//     std::cout << "Initial state. History size: " << cube.getHistorySize() << "\n";
+
+//     // ביצוע מהלך
+//     cube.applyRotation(MoveOption::UP, pi / 2.0f, defaultCondition, defaultRotationVector);
+//     std::cout << "After UP move. History size: " << cube.getHistorySize() << "\n";
+
+//     // ביטול המהלך (Undo)
+//     cube.undo(defaultCondition, defaultRotationVector);
+//     std::cout << "After Undo. History size: " << cube.getHistorySize() << "\n";
+
+//     return 0;
+// }
